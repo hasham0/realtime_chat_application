@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "rootDirs": ["src"], // Consider removing 'custom-types.d.ts' from here
+    "outDir": "dist",
+    "lib": ["es2020"],
+    "target": "es2020",
+    "module": "NodeNext", // Keep this if you are targeting ES Modules
+    "moduleResolution": "NodeNext", // Keep this if you are targeting ES Modules
+    "esModuleInterop": true,
+    "types": ["node"]
+  },
+  "include": [
+    "src",
+    "src/custom-types.d.ts" // Include your custom types here
+  ]
+}
