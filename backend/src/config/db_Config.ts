@@ -4,7 +4,7 @@ import "dotenv/config";
 const connectDB = async () => {
   try {
     const connect = await mongoose.connect(envValidation.MONGO_DB_URL, {
-      dbName: "ChatApplication",
+      dbName: envValidation.DB_NAME,
     });
     return connect;
   } catch (error) {

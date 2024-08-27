@@ -1,10 +1,14 @@
-import AuthHeroImg from "@/assets/AuthImg.png";
+import AuthHeroImg from "@/assets/authimg.png";
 import Victory from "@/assets/victory.svg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SignUp from "./sign-up";
-import LoginForm from "./log-in-form";
+import SignUp from "./_components/sign-up";
+import LoginForm from "./_components/log-in-form";
+import { useState } from "react";
 
 export default function Auth() {
+  const [activeTab, setActiveTab] = useState<string>("login");
+  const handleTabChange = (tab: string) => setActiveTab(tab);
+
   return (
     <section className="flex h-[100vh] w-[100vw] items-center justify-center">
       <div className="grid h-[80vh] w-[80vw] rounded-3xl border-2 bg-white text-opacity-90 shadow-2xl md:w-[90vw] lg:w-[70vw] xl:w-[60vw] xl:grid-cols-2">
@@ -19,7 +23,12 @@ export default function Auth() {
             </p>
           </div>
           <div className="flex w-full items-center justify-center">
-            <Tabs defaultValue="login" className="w-3/4">
+            <Tabs
+              defaultValue="login"
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-3/4"
+            >
               <TabsList className="w-full rounded-none bg-transparent">
                 <TabsTrigger
                   className="w-full rounded-none border-b-2 p-3 text-black text-opacity-90 transition-all duration-300 data-[state=active]:border-b-purple-500 data-[state=active]:bg-transparent data-[state=active]:font-semibold"
@@ -38,7 +47,7 @@ export default function Auth() {
                 <LoginForm />
               </TabsContent>
               <TabsContent value="signup">
-                <SignUp />
+                <SignUp handleTabChange={handleTabChange} />
               </TabsContent>
             </Tabs>
           </div>

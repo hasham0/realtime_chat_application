@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { LoginSchema, LoginSchemaTS } from "@/schema/authSchema";
 const LoginForm = () => {
   const form = useForm<LoginSchemaTS>({
-    resolver: zodResolver(LoginSchema.required()),
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
       password: "",

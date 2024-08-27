@@ -9,7 +9,7 @@ import dotenv from "dotenv";
 
 // utils,routers and constant
 import connectDB from "./config/db_Config";
-// import userRoute from "./routers/user.router.js";
+import AuthRoutes from "./routes/auth.route";
 import errorMiddleware from "./middlewares/error.middleware";
 import envValidation from "./validation/env.validation";
 
@@ -17,12 +17,6 @@ import envValidation from "./validation/env.validation";
 const app: Application = express();
 
 // set dotenv config
-dotenv.config({
-  path: "../.env",
-});
-
-//if .env file is not found
-
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
 });
@@ -34,12 +28,15 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: process.env.CROSS_ORIGIN,
+    origin: [envValidation.CLIENT_ORIGIN],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    preflightContinue: false,
   })
 );
+
 // set routes
-// app.use("/api/users", userRoute);
+app.use("/api/auth", AuthRoutes);
 
 // set global level error handling middlwere
 app.use(errorMiddleware);

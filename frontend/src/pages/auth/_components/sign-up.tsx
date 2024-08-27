@@ -11,8 +11,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RegisterSchema, RegisterSchemaTS } from "@/schema/authSchema";
+import ApiClient from "@/lib/api-client";
+import { SIGNUP_ROUTE } from "@/utils/constants";
+import axios, { AxiosError } from "axios";
+import { toast } from "sonner";
+axios.defaults.withCredentials = true;
 
-const SignUp = () => {
+type Props = {
+  handleTabChange: (tab: string) => void;
+};
+const SignUp = ({ handleTabChange }: Props) => {
   const form = useForm<RegisterSchemaTS>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -22,8 +30,22 @@ const SignUp = () => {
     },
   });
 
-  const onSubmitSignUp = (values: RegisterSchemaTS) => {
-    console.log(values);
+  const onSubmitSignUp = async (values: RegisterSchemaTS) => {
+    try {
+      const response = await ApiClient.post(SIGNUP_ROUTE, {
+        email: values.email,
+        password: values.password,
+      });
+      const { message } = response.data;
+      toast(message);
+      handleTabChange("login");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const err = error as AxiosError<{ message: string }>;
+        const message = err.response?.data.message;
+        toast(message);
+      }
+    }
   };
 
   return (
