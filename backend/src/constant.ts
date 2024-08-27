@@ -6,7 +6,7 @@ const REFRESH_TOKEN = "refreshToken";
 const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: envValidation.NODE_ENV === "development",
-  sameSite: "strict",
+  sameSite: "none",
   maxAge: 30 * 24 * 60 * 60 * 1000 * 3,
 };
 

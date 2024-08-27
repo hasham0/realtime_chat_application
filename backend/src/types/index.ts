@@ -20,4 +20,19 @@ interface UserDocumentTS extends UserSchemaTS {
   isPasswordCorrect(password: string): Promise<boolean>;
 }
 
-export type { RequestHandler, UserDocumentTS, UserSchemaTS };
+interface TokenData {
+  _id: string;
+  email: string;
+}
+
+interface AuthRequest extends Request {
+  userId: string;
+}
+
+export type {
+  RequestHandler,
+  UserDocumentTS,
+  UserSchemaTS,
+  TokenData,
+  AuthRequest,
+};

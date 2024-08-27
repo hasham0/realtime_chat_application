@@ -1,8 +1,9 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
 import envValidation from "../validation/env.validation";
+import { TokenData } from "../types";
 
-const generateAccessToken = async (data: { _id: string; email: string }) => {
+const generateAccessToken = async (data: TokenData) => {
   return jwt.sign(
     { _id: data._id, email: data.email },
     envValidation.JWT_ACCESS_KEY,

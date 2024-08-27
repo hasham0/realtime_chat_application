@@ -11,6 +11,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoginSchema, LoginSchemaTS } from "@/schema/authSchema";
+import ApiClient from "@/lib/api-client";
+//import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { LOGIN_ROUTE } from "@/utils/constants";
+
 const LoginForm = () => {
   const form = useForm<LoginSchemaTS>({
     resolver: zodResolver(LoginSchema),
@@ -20,8 +25,30 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmitLogin = (values: LoginSchemaTS) => {
-    console.log(values);
+  const onSubmitLogin = async (values: LoginSchemaTS) => {
+    try {
+      const response = await ApiClient.post(
+        LOGIN_ROUTE,
+        {
+          email: values.email,
+          password: values.password,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+      console.log(response.data);
+      // const { message } = response.data;
+      // toast(message);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const err = error as AxiosError<{ message: string }>;
+        console.log(err);
+
+        // const message = err.response?.data.message;
+        // toast(message);
+      }
+    }
   };
 
   return (

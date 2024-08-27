@@ -13,9 +13,8 @@ import { Button } from "@/components/ui/button";
 import { RegisterSchema, RegisterSchemaTS } from "@/schema/authSchema";
 import ApiClient from "@/lib/api-client";
 import { SIGNUP_ROUTE } from "@/utils/constants";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { toast } from "sonner";
-axios.defaults.withCredentials = true;
 
 type Props = {
   handleTabChange: (tab: string) => void;
@@ -32,10 +31,16 @@ const SignUp = ({ handleTabChange }: Props) => {
 
   const onSubmitSignUp = async (values: RegisterSchemaTS) => {
     try {
-      const response = await ApiClient.post(SIGNUP_ROUTE, {
-        email: values.email,
-        password: values.password,
-      });
+      const response = await ApiClient.post(
+        SIGNUP_ROUTE,
+        {
+          email: values.email,
+          password: values.password,
+        },
+        {
+          withCredentials: true,
+        },
+      );
       const { message } = response.data;
       toast(message);
       handleTabChange("login");
