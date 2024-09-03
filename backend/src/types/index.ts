@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+import { UserType } from "models/user.model.js";
 import { Document } from "mongoose";
 
 type RequestHandler = (
   request: Request,
   response: Response,
   next: NextFunction
-) => Promise<void> | void;
+) => Promise<void | UserType> | void;
 
 interface UserSchemaTS extends Document {
   email: string;

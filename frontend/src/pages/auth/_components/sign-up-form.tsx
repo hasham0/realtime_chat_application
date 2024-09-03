@@ -18,11 +18,12 @@ import ApiClient from "@/lib/api-client";
 import { SIGNUP_ROUTE } from "@/utils/constants";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {
   handleTabChange: (tab: string) => void;
 };
-const SignUp = ({ handleTabChange }: Props) => {
+const SignUpForm = ({ handleTabChange }: Props) => {
   const form = useForm<RegisterValidSchemaTS>({
     resolver: zodResolver(RegisterValidSchema),
     defaultValues: {
@@ -32,26 +33,41 @@ const SignUp = ({ handleTabChange }: Props) => {
     },
   });
 
-  const onSubmitSignUp = async (values: RegisterValidSchemaTS) => {
-    try {
-      const response = await ApiClient.post(
+  const { mutateAsync } = useMutation({
+    mutationFn: (data: RegisterValidSchemaTS) => {
+      return ApiClient.post(
         SIGNUP_ROUTE,
         {
-          email: values.email,
-          password: values.password,
+          email: data.email,
+          password: data.password,
         },
         {
           withCredentials: true,
         },
       );
-      const { message } = response.data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      const { message } = data.data;
       toast(message);
       handleTabChange("login");
-    } catch (error) {
+    },
+    onError: (error) => {
       if (error instanceof AxiosError) {
         const err = error as AxiosError<{ message: string }>;
         const message = err.response?.data.message;
         toast(message);
+      }
+    },
+  });
+  const onSubmit = async (values: RegisterValidSchemaTS) => {
+    try {
+      await mutateAsync(values);
+      handleTabChange("login");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const err = error as AxiosError<{ message: string }>;
+        console.log(err);
       }
     }
   };
@@ -59,7 +75,7 @@ const SignUp = ({ handleTabChange }: Props) => {
   return (
     <section>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmitSignUp)} className="grid">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid">
           <FormField
             control={form.control}
             name="email"
@@ -129,9 +145,15 @@ const SignUp = ({ handleTabChange }: Props) => {
             register
           </Button>
         </form>
-      </Form>
+      </Form>{" "}
+      <p
+        onClick={() => handleTabChange("login")}
+        className="cursor-pointer text-center text-sm text-blue-500 underline underline-offset-2"
+      >
+        Already Have an Account
+      </p>
     </section>
   );
 };
 
-export default SignUp;
+export default SignUpForm;

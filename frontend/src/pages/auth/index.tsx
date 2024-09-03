@@ -1,9 +1,9 @@
 import AuthHeroImg from "@/assets/authimg.png";
 import Victory from "@/assets/victory.svg";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SignUp from "./_components/sign-up";
 import LoginForm from "./_components/log-in-form";
 import { useState } from "react";
+import SignUpForm from "./_components/sign-up-form";
 
 export default function Auth() {
   const [activeTab, setActiveTab] = useState<string>("login");
@@ -44,10 +44,10 @@ export default function Auth() {
                 </TabsTrigger>
               </TabsList>
               <TabsContent defaultChecked={true} value="login">
-                <LoginForm />
+                <LoginForm handleTabChange={handleTabChange} />
               </TabsContent>
               <TabsContent value="signup">
-                <SignUp handleTabChange={handleTabChange} />
+                <SignUpForm handleTabChange={handleTabChange} />
               </TabsContent>
             </Tabs>
           </div>

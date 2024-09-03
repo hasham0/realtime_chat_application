@@ -6,7 +6,7 @@ import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
 
-// utils,routers and constant
+// utils , routers and constant
 import connectDB from "./config/db_Config.js";
 import AuthRoutes from "./routes/auth.route.js";
 import errorMiddleware from "./middlewares/error.middleware.js";

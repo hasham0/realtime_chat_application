@@ -10,43 +10,74 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { LoginSchema, LoginSchemaTS } from "@/schema/authSchema";
 import ApiClient from "@/lib/api-client";
-//import { toast } from "sonner";
+import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { LOGIN_ROUTE } from "@/utils/constants";
+import { useMutation } from "@tanstack/react-query";
+import {
+  LoginValidSchema,
+  LoginValidSchemaTS,
+} from "@/validation/auth.validation.schema";
+import { UserProfileTS } from "@/types";
+import { useNavigate } from "react-router-dom";
+import useStore from "@/zustand/store/store";
 
-const LoginForm = () => {
-  const form = useForm<LoginSchemaTS>({
-    resolver: zodResolver(LoginSchema),
+type Props = {
+  handleTabChange: (tab: string) => void;
+};
+const LoginForm = ({ handleTabChange }: Props) => {
+  const { setUserInfo } = useStore();
+  const navigate = useNavigate();
+  const form = useForm<LoginValidSchemaTS>({
+    resolver: zodResolver(LoginValidSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
-
-  const onSubmitLogin = async (values: LoginSchemaTS) => {
-    try {
-      const response = await ApiClient.post(
+  const { mutateAsync } = useMutation({
+    mutationFn: (data: LoginValidSchemaTS) => {
+      return ApiClient.post<{
+        message: string;
+        data: UserProfileTS;
+      }>(
         LOGIN_ROUTE,
         {
-          email: values.email,
-          password: values.password,
+          email: data.email,
+          password: data.password,
         },
         {
           withCredentials: true,
         },
       );
-      console.log(response.data);
-      // const { message } = response.data;
-      // toast(message);
+    },
+    onSuccess: (data) => data,
+    onError: (error) => {
+      const err = error as AxiosError<{ message: string }>;
+      const message = err.response?.data.message;
+      toast(message);
+    },
+  });
+
+  const onSubmitLogin = async (values: LoginValidSchemaTS) => {
+    try {
+      const response = await mutateAsync(values);
+      const {
+        message,
+        data: userData,
+      }: { message: string; data: UserProfileTS } = response.data;
+      toast(message);
+      if (!userData.profile_setup) {
+        setUserInfo(userData);
+        return navigate("/profile");
+      }
+      setUserInfo(userData);
+      return navigate("/chat");
     } catch (error) {
       if (error instanceof AxiosError) {
         const err = error as AxiosError<{ message: string }>;
         console.log(err);
-
-        // const message = err.response?.data.message;
-        // toast(message);
       }
     }
   };
@@ -106,6 +137,12 @@ const LoginForm = () => {
           </Button>
         </form>
       </Form>
+      <p
+        onClick={() => handleTabChange("signup")}
+        className="cursor-pointer text-center text-sm text-blue-500 underline underline-offset-2"
+      >
+        Create New Account{" "}
+      </p>
     </section>
   );
 };

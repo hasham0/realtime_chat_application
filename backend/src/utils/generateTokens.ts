@@ -5,7 +5,7 @@ import { TokenData } from "../types/index.js";
 
 const generateAccessToken = async (data: TokenData) => {
   return jwt.sign(
-    { _id: data._id, email: data.email },
+    { _id: String(data._id), email: data.email },
     envValidation.JWT_ACCESS_KEY,
     {
       expiresIn: envValidation.JWT_ACCESS_KEY_EXPIRY,
@@ -14,7 +14,7 @@ const generateAccessToken = async (data: TokenData) => {
 };
 
 const generateRefreshToken = async (_id: string) => {
-  return jwt.sign({ _id: _id }, envValidation.JWT_REFRESH_KEY, {
+  return jwt.sign({ _id: String(_id) }, envValidation.JWT_REFRESH_KEY, {
     expiresIn: envValidation.JWT_REFRESH_KEY_EXPIRY,
   });
 };

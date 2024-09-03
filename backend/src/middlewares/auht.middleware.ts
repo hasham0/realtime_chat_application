@@ -4,12 +4,15 @@ import { ACCESS_TOKEN } from "../constant.js";
 import { verifyAccessToken } from "../utils/generateTokens.js";
 import errorCode from "../utils/errorMsg.js";
 import { AuthRequest, TokenData } from "../types/index.js";
-
 import { JwtPayload } from "jsonwebtoken";
 
 // ? Authenticated User
 const isUserAuthenticated = asyncHandler(
-  async (request: Request, response: Response, next: NextFunction) => {
+  async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ): Promise<void> => {
     // extract token from request and validate
     const getAccessToken =
       request.cookies[ACCESS_TOKEN] ||

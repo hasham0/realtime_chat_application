@@ -1,11 +1,13 @@
 import bcryptjs from "bcryptjs";
 import { UserDocumentTS } from "../types/index.js";
-import { model, Schema } from "mongoose";
+import { InferSchemaType, model, Schema } from "mongoose";
 
 const UserSchema = new Schema<UserDocumentTS>(
   {
     first_name: {
       type: String,
+      default: "",
+      required: false,
     },
     email: {
       type: String,
@@ -18,6 +20,8 @@ const UserSchema = new Schema<UserDocumentTS>(
     },
     last_name: {
       type: String,
+      default: "",
+      required: false,
     },
     password: {
       type: String,
@@ -27,7 +31,7 @@ const UserSchema = new Schema<UserDocumentTS>(
     image: {
       type: String,
       default: "",
-      // required: [true, "image is required"],
+      required: false,
     },
     color: {
       type: Number,
@@ -57,6 +61,7 @@ UserSchema.methods.isPasswordCorrect = async function (
 ): Promise<boolean> {
   return await bcryptjs.compare(password, this.password);
 };
+export type UserType = InferSchemaType<typeof UserSchema>;
 
 const User = model<UserDocumentTS>("User", UserSchema);
 

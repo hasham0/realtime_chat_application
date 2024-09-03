@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import asyncHandler from "../helpers/asyncHandler.js";
 import { AuthRequest, UserSchemaTS } from "../types/index.js";
-import User from "../models/user.model.js";
+import User, { UserType } from "../models/user.model.js";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -24,7 +24,7 @@ const signUp = asyncHandler(
     }
 
     /* check user if existed */
-    const isUserExist = await User.findOne({
+    const isUserExist: UserType = await User.findOne({
       $or: [{ email }],
     });
 
@@ -33,7 +33,10 @@ const signUp = asyncHandler(
     }
 
     /* create new user */
-    const newUser = await User.create({ email: email, password: password });
+    const newUser: UserType = await User.create({
+      email: email,
+      password: password,
+    });
 
     /* generate access and refresh token */
     const accessTokenGen: string = await generateAccessToken({
@@ -51,6 +54,11 @@ const signUp = asyncHandler(
       .cookie(REFRESH_TOKEN, refreshTokenGen, cookieOptions)
       .json({
         message: "User Created Successfully",
+        data: {
+          _id: newUser._id,
+          email: newUser.email,
+          profileSetup: newUser.profile_setup,
+        },
       });
   }
 );
@@ -70,7 +78,7 @@ const login = asyncHandler(
     }
 
     /* check user if existed */
-    const isUserExist = await User.findOne({
+    const isUserExist: UserType = await User.findOne({
       $or: [{ email }],
     }).select("+password");
 
@@ -96,11 +104,12 @@ const login = asyncHandler(
 
     /* send responce */
     response
-      .status(201)
+      .status(200)
       .cookie(ACCESS_TOKEN, accessTokenGen, cookieOptions)
       .cookie(REFRESH_TOKEN, refreshTokenGen, cookieOptions)
       .json({
         message: "Login User Successfully",
+        data: isUserExist,
       });
   }
 );
@@ -116,7 +125,7 @@ const logout = asyncHandler(
     const userID = _req.userId;
 
     /* check user if existed */
-    const isUserExist = await User.findById({ _id: userID });
+    const isUserExist: UserType = await User.findById({ _id: userID });
     if (!isUserExist) {
       return next(errorCode(400, "user not found"));
     }

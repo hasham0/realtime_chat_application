@@ -8,6 +8,6 @@
     "sourceMap": true,
     "noImplicitAny": true
   },
-  "include": ["src/**/*", "src/custom-types.d.ts"], // Include all TypeScript files in src and custom types file
-  "exclude": ["node_modules", "**/*.spec.ts"] // Exclude node_modules and test files
+  "include": ["src/**/*", "src/custom-types.d.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
