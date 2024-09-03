@@ -1,6 +1,6 @@
 import bcryptjs from "bcryptjs";
-import { UserDocumentTS } from "../types/index";
-import { Model, Schema, model, models } from "mongoose";
+import { UserDocumentTS } from "../types/index.js";
+import { model, Schema } from "mongoose";
 
 const UserSchema = new Schema<UserDocumentTS>(
   {
@@ -58,8 +58,6 @@ UserSchema.methods.isPasswordCorrect = async function (
   return await bcryptjs.compare(password, this.password);
 };
 
-const User =
-  (models?.["User"] as Model<UserDocumentTS>) ||
-  model<UserDocumentTS>("User", UserSchema);
+const User = model<UserDocumentTS>("User", UserSchema);
 
 export default User;

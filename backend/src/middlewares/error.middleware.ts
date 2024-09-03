@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpError } from "http-errors";
-import envValidation from "../validation/env.validation";
+import envValidation from "../validation/env.validation.js";
 
 const globalErrorHandler = (
   err: HttpError,

@@ -2,23 +2,22 @@
 import { Application } from "express";
 import express from "express";
 import cookieParser from "cookie-parser";
-import path from "node:path";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
 
 // utils,routers and constant
-import connectDB from "./config/db_Config";
-import AuthRoutes from "./routes/auth.route";
-import errorMiddleware from "./middlewares/error.middleware";
-import envValidation from "./validation/env.validation";
+import connectDB from "./config/db_Config.js";
+import AuthRoutes from "./routes/auth.route.js";
+import errorMiddleware from "./middlewares/error.middleware.js";
+import envValidation from "./validation/env.validation.js";
 
 // set variable
 const app: Application = express();
 
 // set dotenv config
 dotenv.config({
-  path: path.resolve(__dirname, "../.env"),
+  path: "../.env",
 });
 
 // set middlewares

@@ -1,5 +1,5 @@
 import { CookieOptions } from "express";
-import envValidation from "./validation/env.validation";
+import envValidation from "./validation/env.validation.js";
 
 const ACCESS_TOKEN = "accessToken";
 const REFRESH_TOKEN = "refreshToken";

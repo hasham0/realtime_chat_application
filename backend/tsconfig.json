@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "rootDirs": ["src"],
-    "outDir": "dist",
-    "lib": ["es2020"],
-    "target": "es2020",
     "module": "NodeNext",
+    "target": "ES2022",
     "moduleResolution": "NodeNext",
-    "esModuleInterop": true,
-    "types": ["node"]
+    "baseUrl": "src",
+    "outDir": "dist",
+    "sourceMap": true,
+    "noImplicitAny": true
   },
-  "include": ["src", "src/custom-types.d.ts"]
+  "include": ["src/**/*", "src/custom-types.d.ts"], // Include all TypeScript files in src and custom types file
+  "exclude": ["node_modules", "**/*.spec.ts"] // Exclude node_modules and test files
 }

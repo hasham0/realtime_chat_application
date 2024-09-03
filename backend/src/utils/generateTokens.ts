@@ -1,7 +1,7 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
-import envValidation from "../validation/env.validation";
-import { TokenData } from "../types";
+import envValidation from "../validation/env.validation.js";
+import { TokenData } from "../types/index.js";
 
 const generateAccessToken = async (data: TokenData) => {
   return jwt.sign(

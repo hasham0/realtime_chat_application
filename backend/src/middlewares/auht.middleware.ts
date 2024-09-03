@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import asyncHandler from "../helpers/asyncHandler";
-import { ACCESS_TOKEN } from "../constant";
-import { verifyAccessToken } from "../utils/generateTokens";
-import errorCode from "../utils/errorMsg";
-import { AuthRequest, TokenData } from "../types";
+import asyncHandler from "../helpers/asyncHandler.js";
+import { ACCESS_TOKEN } from "../constant.js";
+import { verifyAccessToken } from "../utils/generateTokens.js";
+import errorCode from "../utils/errorMsg.js";
+import { AuthRequest, TokenData } from "../types/index.js";
+
 import { JwtPayload } from "jsonwebtoken";
 
 // ? Authenticated User

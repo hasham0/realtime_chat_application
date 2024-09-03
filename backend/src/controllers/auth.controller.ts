@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import asyncHandler from "../helpers/asyncHandler";
-import { AuthRequest, UserSchemaTS } from "../types";
-import User from "../models/user.model";
+import asyncHandler from "../helpers/asyncHandler.js";
+import { AuthRequest, UserSchemaTS } from "../types/index.js";
+import User from "../models/user.model.js";
 import {
   generateAccessToken,
   generateRefreshToken,
-} from "../utils/generateTokens";
-import { ACCESS_TOKEN, cookieOptions, REFRESH_TOKEN } from "../constant";
-import errorCode from "../utils/errorMsg";
+} from "../utils/generateTokens.js";
+import { ACCESS_TOKEN, cookieOptions, REFRESH_TOKEN } from "../constant.js";
+import errorCode from "../utils/errorMsg.js";
 
 //note: SIGNUP USER_
 const signUp = asyncHandler(

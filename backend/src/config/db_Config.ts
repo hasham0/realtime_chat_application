@@ -1,4 +1,5 @@
-import envValidation from "../validation/env.validation";
+import envValidation from "../validation/env.validation.js";
+
 import mongoose from "mongoose";
 import "dotenv/config";
 const connectDB = async () => {
