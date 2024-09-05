@@ -20,15 +20,14 @@ import {
   LoginValidSchemaTS,
 } from "@/validation/auth.validation.schema";
 import { UserProfileTS } from "@/types";
-import { useNavigate } from "react-router-dom";
-import useStore from "@/zustand/store/store";
+import useAppStore from "@/zustand/store/store";
 
 type Props = {
   handleTabChange: (tab: string) => void;
 };
 const LoginForm = ({ handleTabChange }: Props) => {
-  const { setUserInfo } = useStore();
-  const navigate = useNavigate();
+  const { setUserInfo } = useAppStore();
+
   const form = useForm<LoginValidSchemaTS>({
     resolver: zodResolver(LoginValidSchema),
     defaultValues: {
@@ -36,6 +35,7 @@ const LoginForm = ({ handleTabChange }: Props) => {
       password: "",
     },
   });
+
   const { mutateAsync } = useMutation({
     mutationFn: (data: LoginValidSchemaTS) => {
       return ApiClient.post<{
@@ -67,13 +67,11 @@ const LoginForm = ({ handleTabChange }: Props) => {
         message,
         data: userData,
       }: { message: string; data: UserProfileTS } = response.data;
-      toast(message);
-      if (!userData.profile_setup) {
-        setUserInfo(userData);
-        return navigate("/profile");
-      }
+      toast(message, {
+        description: "please complete profile to continue...",
+      });
+      localStorage.setItem("userData", JSON.stringify(userData));
       setUserInfo(userData);
-      return navigate("/chat");
     } catch (error) {
       if (error instanceof AxiosError) {
         const err = error as AxiosError<{ message: string }>;

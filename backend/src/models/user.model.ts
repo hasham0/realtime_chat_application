@@ -35,6 +35,7 @@ const UserSchema = new Schema<UserDocumentTS>(
     },
     color: {
       type: Number,
+      default: 0,
       required: false,
     },
     profile_setup: {

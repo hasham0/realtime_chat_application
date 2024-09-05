@@ -8,11 +8,7 @@ import { JwtPayload } from "jsonwebtoken";
 
 // ? Authenticated User
 const isUserAuthenticated = asyncHandler(
-  async (
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ): Promise<void> => {
+  async (request: Request, _, next: NextFunction): Promise<void> => {
     // extract token from request and validate
     const getAccessToken =
       request.cookies[ACCESS_TOKEN] ||
